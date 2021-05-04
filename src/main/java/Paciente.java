@@ -56,7 +56,7 @@ public class Paciente extends Pessoa {
         char tryAgain = 'n';
 
         do {
-            System.out.print("Insira seu CPF: ");
+            System.out.print("\nInsira seu CPF: ");
             String cpf = sc.nextLine();
 
             System.out.print("Insira seu username: ");
@@ -69,17 +69,18 @@ public class Paciente extends Pessoa {
                 found = cadastro[0].equals(username) && cadastro[1].equals(password) && cadastro[4].equals(cpf);
             }
 
-            if(found == false) {
-                System.out.print("Usuário não encontrado! Deseja tentar novamente? [y/n] ");
+            if(!found) {
+                System.out.print("Usuário não encontrado! Deseja tentar novamente? [y/n]");
                 tryAgain = (char) System.in.read();
+                sc.nextLine();
             }
             else {
                 allow = "1";
             }
 
-        } while(found == false || tryAgain == 'y');
+        } while(!found && tryAgain == 'y');
 
-        return new String[]{allow, cpf, username, password};
+        return new String[]{allow, cpf, username, password, "paciente"};
     }
 
     public void visualizarConsulta(ArrayList<String[]> consulta, String cpf) {

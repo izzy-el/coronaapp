@@ -77,13 +77,14 @@ public class Medicos extends Pessoa {
             if(found == false) {
                 System.out.print("Usuário não encontrado! Deseja tentar novamente? [y/n] ");
                 tryAgain = (char) System.in.read();
+                sc.nextLine();
             }
             else {
                 allow = "1";
             }
-        } while(found == false || tryAgain == 'y');
+        } while(!found && tryAgain == 'y');
 
-        return new String[]{allow, id, username, password};
+        return new String[]{allow, id, username, password, "medico"};
     }
 
     public void visualizarConsulta(ArrayList<String[]> consulta) {
@@ -152,6 +153,17 @@ public class Medicos extends Pessoa {
         }
 
         return new String[]{nomePaciente, cpf, data};
+    }
+
+    public void visualizarPacientes(ArrayList<String[]> cadastros) {
+        cadastros.forEach(paciente -> {
+            System.out.println(paciente[2] + " | " +  paciente[3] + " | " + paciente[4]);
+            System.out.println("Telefone: " + paciente[5]);
+            System.out.println(paciente[6] + " | " +  paciente[7] + " | " + paciente[9]);
+            System.out.println("CEP: " + paciente[8]);
+            System.out.println("Sintomas: " + paciente[10]);
+            System.out.println("----------------------------------------------------------");
+        });
     }
 
 }

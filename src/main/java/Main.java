@@ -17,12 +17,14 @@ public class Main {
 
         Paciente paciente = new Paciente();
         Medicos medico = new Medicos();
+        Mensagem mensagem = new Mensagem();
         String[] sessionPaciente;
         String[] sessionMedico;
 
         ArrayList<String[]> pacientesCadastros = new ArrayList<>();
         ArrayList<String[]> medicosCadastros = new ArrayList<>();
         ArrayList<String[]> consultas = new ArrayList<>();
+        ArrayList<String[]> mensagens = new ArrayList<>();
         ArrayList<String> listData = new ArrayList<>();
         int opcaoEntrada;
         listData.add("1212");
@@ -31,7 +33,7 @@ public class Main {
 
         //Menu
         do {
-            System.out.println("1. Cadastro (Paciente)");
+            System.out.println("\n1. Cadastro (Paciente)");
             System.out.println("2. Login (Paciente)\n");
 
             System.out.println("3. Cadastro (Equipe de Saúde)");
@@ -53,7 +55,7 @@ public class Main {
 
                     if(sessionPaciente[0].equals("1")) {
                         do {
-                            System.out.print("Escolha uma opcao: ");
+                            System.out.println("\nEscolha uma opcao: \n");
                             System.out.println("1 - Consultar agendamentos");
                             System.out.println("2 - Consultar mensagens");
                             System.out.println("3 - Sair");
@@ -65,7 +67,7 @@ public class Main {
                                     break;
 
                                 case 2:
-                                    //Mensegem.consultarMensagens(String cpf, ArrayList<String[]> mensagens);
+                                    mensagem.visualizarMensagens(mensagens, pacientesCadastros, sessionPaciente[1], sessionPaciente[4]);
                                     break;
 
                                 default:
@@ -91,10 +93,12 @@ public class Main {
 
                     if(sessionMedico[0].equals("1")) {
                         do {
-                            System.out.println("Escolha uma opcao: ");
-                            System.out.println("1 - Registar agendamentos");
+                            System.out.println("\nEscolha uma opcao: \n");
+                            System.out.println("1 - Registrar agendamentos");
                             System.out.println("2 - Consultar agendamentos");
-                            System.out.println("3 - Sair");
+                            System.out.println("3 - Visualizar mensagens");
+                            System.out.println("4 - Visualizar pacientes");
+                            System.out.println("5 - Sair");
                             optMedico = sc.nextInt();
 
                             switch(optMedico) {
@@ -108,14 +112,18 @@ public class Main {
                                     break;
 
                                 case 3:
-                                    System.out.println("Voltando...");
+                                    mensagem.visualizarMensagens(mensagens, pacientesCadastros, sessionMedico[1], sessionMedico[4]);
+                                    break;
+
+                                case 4:
+                                    medico.visualizarPacientes(pacientesCadastros);
                                     break;
 
                                 default:
-                                    System.out.println("Opcao invalida. Tente novamento.");
+                                    System.out.println("Opcao invalida. Tente novamente.");
                             }
 
-                        } while (optMedico != 3);
+                        } while (optMedico != 5);
                     }
 
                     break;
