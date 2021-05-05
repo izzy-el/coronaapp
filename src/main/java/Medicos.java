@@ -74,15 +74,14 @@ public class Medicos extends Pessoa {
             for (String[] cadastro : cadastros) {
                 found = cadastro[3].equals(id) && cadastro[1].equals(username) && cadastro[2].equals(password);
             }
-            if(found == false) {
+            if (found == false) {
                 System.out.print("Usuário não encontrado! Deseja tentar novamente? [y/n] ");
                 tryAgain = (char) System.in.read();
                 sc.nextLine();
-            }
-            else {
+            } else {
                 allow = "1";
             }
-        } while(!found && tryAgain == 'y');
+        } while (!found && tryAgain == 'y');
 
         return new String[]{allow, id, username, password, "medico"};
     }
@@ -95,8 +94,8 @@ public class Medicos extends Pessoa {
         String cpf = sc.nextLine();
         int control = 0;
 
-        for(String[] consultas : consulta) {
-            if(consultas[0].equals(nome) && consultas[1].equals(cpf)) {
+        for (String[] consultas : consulta) {
+            if (consultas[0].equals(nome) && consultas[1].equals(cpf)) {
                 System.out.println(consultas[0] + " " + consultas[1] + " " + consultas[2]);
                 break;
             }
@@ -113,18 +112,17 @@ public class Medicos extends Pessoa {
         int control = 0;
 
         for (String[] cadastro : cadastros) {
-            if(cadastro[2].equals(nomePaciente) && cadastro[4].equals(cpf)) {
+            if (cadastro[2].equals(nomePaciente) && cadastro[4].equals(cpf)) {
                 control = 1;
                 break;
             }
         }
 
 
-        if(control == 0) {
+        if (control == 0) {
             System.out.println("Paciente ainda não possui cadastro no sistema.");
             return new String[]{"ERRO"};
-        }
-        else {
+        } else {
             for (String listDate : listData) {
                 System.out.println("Datas e horários disponíveis!");
                 System.out.println(listDate);
@@ -146,7 +144,7 @@ public class Medicos extends Pessoa {
                 }
             }
 
-            if(control == 0) {
+            if (control == 0) {
                 System.out.println("Esta data já está reservada! Por favor, escolha outra.");
                 return new String[]{"ERRO"};
             }
@@ -155,15 +153,108 @@ public class Medicos extends Pessoa {
         return new String[]{nomePaciente, cpf, data};
     }
 
-    public void visualizarPacientes(ArrayList<String[]> cadastros) {
+    public void visualizarPacientes(ArrayList<String[]> cadastros) throws IOException {
+        System.out.println("Número de pacientes: " + cadastros.size());
         cadastros.forEach(paciente -> {
-            System.out.println(paciente[2] + " | " +  paciente[3] + " | " + paciente[4]);
+            System.out.println(paciente[2] + " | " + paciente[3] + " | " + paciente[4]);
             System.out.println("Telefone: " + paciente[5]);
-            System.out.println(paciente[6] + " | " +  paciente[7] + " | " + paciente[9]);
+            System.out.println(paciente[6] + " | " + paciente[7] + " | " + paciente[9]);
             System.out.println("CEP: " + paciente[8]);
             System.out.println("Sintomas: " + paciente[10]);
             System.out.println("----------------------------------------------------------");
         });
+
+        System.out.println("Digite 'f' para aplicar uma filtragem ou 'v' para voltar[f/v]: ");
+        char optMensagem = (char) System.in.read();
+        if (optMensagem == 'f') {
+            this.filtrarPacientes(cadastros);
+        } else {
+            System.out.println("Voltando...");
+        }
     }
 
+    public void filtrarPacientes(ArrayList<String[]> cadastros) throws IOException {
+        char tryAgain = 'n';
+        int filtro;
+
+        do {
+            sc.nextLine();
+            System.out.println("\n\nDigite o filtro que você deseja aplicar na visualização: ");
+            System.out.println("1 - Cidade");
+            System.out.println("2 - Estado");
+            System.out.println("3 - Idade");
+
+            filtro = sc.nextInt();
+
+            if (filtro == 1) {
+                System.out.println("Digite a cidade que deseja aplicar como filtro: ");
+                String cidade = sc.nextLine();
+
+                cadastros.forEach(paciente -> {
+                    if (paciente[7].contains(cidade)) {
+                        System.out.println(paciente[2] + " | " + paciente[3] + " | " + paciente[4]);
+                        System.out.println("Telefone: " + paciente[5]);
+                        System.out.println(paciente[6] + " | " + paciente[7] + " | " + paciente[9]);
+                        System.out.println("CEP: " + paciente[8]);
+                        System.out.println("Sintomas: " + paciente[10]);
+                        System.out.println("----------------------------------------------------------");
+                    }
+                });
+            }
+
+            if (filtro == 2) {
+                System.out.println("Digite o estado que deseja aplicar como filtro: ");
+                String estado = sc.nextLine();
+
+                cadastros.forEach(paciente -> {
+                    if (paciente[6].contains(estado)) {
+                        System.out.println(paciente[2] + " | " + paciente[3] + " | " + paciente[4]);
+                        System.out.println("Telefone: " + paciente[5]);
+                        System.out.println(paciente[6] + " | " + paciente[7] + " | " + paciente[9]);
+                        System.out.println("CEP: " + paciente[8]);
+                        System.out.println("Sintomas: " + paciente[10]);
+                        System.out.println("----------------------------------------------------------");
+                    }
+                });
+            }
+
+            if (filtro == 3) {
+                sc.nextLine();
+                System.out.println("Digite o sinal do filtro ('maior que' ou 'menor que') a ser aplicado: ");
+                String sinal = sc.nextLine();
+
+                sc.nextLine();
+                System.out.println("Digite a idade que deseja aplicar como filtro: ");
+                int idade = sc.nextInt();
+
+                if (sinal.equals("maior que")) {
+                    cadastros.forEach(paciente -> {
+                        if (Integer.parseInt(paciente[3]) > idade) {
+                            System.out.println(paciente[2] + " | " + paciente[3] + " | " + paciente[4]);
+                            System.out.println("Telefone: " + paciente[5]);
+                            System.out.println(paciente[6] + " | " + paciente[7] + " | " + paciente[9]);
+                            System.out.println("CEP: " + paciente[8]);
+                            System.out.println("Sintomas: " + paciente[10]);
+                            System.out.println("----------------------------------------------------------");
+                        }
+                    });
+                } else {
+                    cadastros.forEach(paciente -> {
+                        if (Integer.parseInt(paciente[3]) < idade) {
+                            System.out.println(paciente[2] + " | " + paciente[3] + " | " + paciente[4]);
+                            System.out.println("Telefone: " + paciente[5]);
+                            System.out.println(paciente[6] + " | " + paciente[7] + " | " + paciente[9]);
+                            System.out.println("CEP: " + paciente[8]);
+                            System.out.println("Sintomas: " + paciente[10]);
+                            System.out.println("----------------------------------------------------------");
+                        }
+                    });
+                }
+            }
+            System.out.println("Deseja aplicar outra filtragem?");
+            tryAgain = (char) System.in.read();
+
+        } while (tryAgain == 'y');
+    }
 }
+

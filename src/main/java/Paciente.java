@@ -83,12 +83,12 @@ public class Paciente extends Pessoa {
         return new String[]{allow, cpf, username, password, "paciente"};
     }
 
-    public void visualizarConsulta(ArrayList<String[]> consulta, String cpf) {
+    public void visualizarConsulta(ArrayList<String[]> consultas, String cpf) {
         int control = 0;
 
-        for(int i = 1; i < consulta.size(); i += 2) {
-            if (cpf.equals(consulta.get(i))) {
-                System.out.println(consulta.get(i) + " " + consulta.get(i - 1) + " " + consulta.get(i + 1));
+        for(int i = 1; i < consultas.size(); i += 2) {
+            if (cpf.equals(consultas.get(i))) {
+                System.out.println(consultas.get(i) + " " + consultas.get(i - 1) + " " + consultas.get(i + 1));
             }
         }
 
