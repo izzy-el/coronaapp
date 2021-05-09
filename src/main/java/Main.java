@@ -1,9 +1,10 @@
 import java.io.IOException;
+import java.sql.*;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        //System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    public static void main(String[] args) throws IOException, SQLException {
+
         System.out.println("+++ Corona APP +++");
         System.out.println("Bem-vindo ao Corona App da OMS!");
         System.out.println("Você possui algum destes sintomas abaixo?");
@@ -18,6 +19,7 @@ public class Main {
         Paciente paciente = new Paciente();
         Medicos medico = new Medicos();
         Mensagem mensagem = new Mensagem();
+        Connect connect = new Connect();
         String[] sessionPaciente;
         String[] sessionMedico;
 
@@ -25,14 +27,21 @@ public class Main {
         ArrayList<String[]> medicosCadastros = new ArrayList<>();
         ArrayList<String[]> consultas = new ArrayList<>();
         ArrayList<String[]> mensagens = new ArrayList<>();
-        ArrayList<String> listData = new ArrayList<>();
+        ArrayList<String[]> listData = new ArrayList<>();
+
+        connect.importarPacientes(pacientesCadastros);
+        connect.importarMedicos(medicosCadastros);
+        connect.importarConsultas(consultas);
+        connect.importarDatas(listData);
+        connect.importarMensagens(mensagens);
+
         int opcaoEntrada;
-        listData.add("1212");
 
         Scanner sc = new Scanner(System.in);
 
         //Menu
         do {
+
             System.out.println("\n1. Cadastro (Paciente)");
             System.out.println("2. Login (Paciente)\n");
 
@@ -63,7 +72,7 @@ public class Main {
 
                             switch(optPaciente) {
                                 case 1:
-                                    paciente.visualizarConsulta(consultas, sessionPaciente[1]);
+                                    paciente.visualizarConsultaPaciente(consultas, sessionPaciente[1]);
                                     break;
 
                                 case 2:
@@ -89,10 +98,11 @@ public class Main {
                     boolean allowMedico = false;
 
                     sessionMedico = medico.login(medicosCadastros);
-
+                    System.out.println(Arrays.toString(sessionMedico));
 
                     if(sessionMedico[0].equals("1")) {
                         do {
+                            System.out.println(sessionMedico[1]);
                             System.out.println("\nEscolha uma opcao: \n");
                             System.out.println("1 - Registrar agendamentos");
                             System.out.println("2 - Consultar agendamentos");

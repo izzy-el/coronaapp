@@ -1,15 +1,19 @@
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Paciente extends Pessoa {
     //Attributes
     private String symptoms;
 
+    Connect connect = new Connect();
+
     Scanner sc = new Scanner(System.in);
 
     @Override
-    public void cadastrar(ArrayList<String[]> cadastros) {
+    public void cadastrar(ArrayList<String[]> cadastros) throws SQLException {
         System.out.print("Digite seu username: ");
         super.username = sc.nextLine();
 
@@ -43,6 +47,8 @@ public class Paciente extends Pessoa {
         System.out.println("Digite os seus sintomas: ");
         symptoms = sc.nextLine();
 
+        connect.cadastrarPaciente(username, password, name, age, cpf, phone, state, city, cep, houseNumber, symptoms);
+
         System.out.println("Cadastro do paciente efetuado!");
 
         String[] info = {username, password, name, age, cpf, phone, state, city, cep, houseNumber, symptoms};
@@ -52,24 +58,27 @@ public class Paciente extends Pessoa {
     @Override
     public String[] login(ArrayList<String[]> cadastros) throws IOException {
         String allow = "0";
-        boolean found = false;
+        String cpf, username, password;
+        AtomicBoolean found = new AtomicBoolean(false);
         char tryAgain = 'n';
 
         do {
             System.out.print("\nInsira seu CPF: ");
-            String cpf = sc.nextLine();
+            cpf = sc.nextLine();
 
             System.out.print("Insira seu username: ");
-            String username = sc.nextLine();
+            username = sc.nextLine();
 
             System.out.print("Insira sua password: ");
-            String password = sc.nextLine();
+            password = sc.nextLine();
 
             for (String[] cadastro : cadastros) {
-                found = cadastro[0].equals(username) && cadastro[1].equals(password) && cadastro[4].equals(cpf);
+                if(cadastro[0].equals(username) && cadastro[1].equals(password) && cadastro[4].equals(cpf)) {
+                    found.set(true);
+                }
             }
 
-            if(!found) {
+            if(!found.get()) {
                 System.out.print("Usuário não encontrado! Deseja tentar novamente? [y/n]");
                 tryAgain = (char) System.in.read();
                 sc.nextLine();
@@ -78,17 +87,19 @@ public class Paciente extends Pessoa {
                 allow = "1";
             }
 
-        } while(!found && tryAgain == 'y');
+        } while(!found.get() && tryAgain == 'y');
 
         return new String[]{allow, cpf, username, password, "paciente"};
     }
 
-    public void visualizarConsulta(ArrayList<String[]> consultas, String cpf) {
+    public void visualizarConsultaPaciente(ArrayList<String[]> consultas, String cpf) {
         int control = 0;
 
-        for(int i = 1; i < consultas.size(); i += 2) {
-            if (cpf.equals(consultas.get(i))) {
-                System.out.println(consultas.get(i) + " " + consultas.get(i - 1) + " " + consultas.get(i + 1));
+        for (String[] agendamento : consultas) {
+            if (agendamento[1].equals(cpf)) {
+                System.out.println(agendamento[0] + " - " + agendamento[1] + " - " + agendamento[2]);
+                //control = 1;
+                break;
             }
         }
 
